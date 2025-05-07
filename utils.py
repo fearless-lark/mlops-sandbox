@@ -24,7 +24,7 @@ def download_files(file_paths, urls):
 
         if not os.path.exists(file_path):
             print(f'{file_path} not found. Fetching from {url}...')
-            response = requests.get(url)
+            response = requests.get(url, timeout=10)
             if response.status_code == 200:
                 with open(file_path, 'wb') as f:
                     f.write(response.content)
