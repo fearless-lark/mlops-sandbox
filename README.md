@@ -9,7 +9,7 @@ Recommended version of Python is 3.12.10
 2. Prepare developing environment
 Install [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) or [virtualenv](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/) on your machine.
 
-Virtualenv is more prefered for this project. So the instructions below are from virtualenv setup on Unix/MacOS machines.
+Virtualenv is more preferred for this project. So the instructions below are from virtualenv setup on Unix/MacOS machines.
 
 If you're willing to use Conda and/or Windows, please refer to the official documentation ([conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html), [virtualenv](https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/)).
 
