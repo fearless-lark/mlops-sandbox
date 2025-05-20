@@ -2,6 +2,13 @@
 *.csv
 *.parquet
 *.bin
+*.pkl
+
+# Database files
+*.db
+
+# Mlflow files
+mlruns/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

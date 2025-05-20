@@ -38,3 +38,11 @@ source .venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
+
+## Linting and Code Checks
+To ensure consistent code quality and styling, this project employs pylint as a linting tool. Regular linting helps identify and fix potential issues in the codebase, leading to more readable and maintainable code.
+
+To run the linter, use the following command:
+```
+pylint $(git ls-files '*.py')
+```
