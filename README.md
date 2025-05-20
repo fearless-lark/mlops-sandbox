@@ -36,7 +36,7 @@ source .venv/bin/activate
 7. Install project dependencies
 ```bash
 pip install --upgrade pip
-uv pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Linting and Code Checks
