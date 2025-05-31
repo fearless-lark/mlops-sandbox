@@ -1,12 +1,4 @@
 """Download data files if they do not exist locally."""
-import os
-import sys
-
-# Add the project root (1 level up from the notebook) to sys.path
-project_root = os.path.abspath(os.path.join(os.getcwd(), ".."))
-if project_root not in sys.path:
-    sys.path.append(project_root)
-
 from utils import download_files
 
 
