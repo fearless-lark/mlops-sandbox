@@ -55,15 +55,20 @@ pylint $(git ls-files '*.py')
 To run MLflow using Docker:
 
 1. Make sure you have Docker and Docker Compose installed on your system
-2. Build and start the MLflow service:
+2. Use the provided management script:
+
 ```bash
-docker-compose up -d
+# Interactive menu mode (recommended)
+./scripts/mlflow_manager.sh
+
+# Or use specific commands
+./scripts/mlflow_manager.sh start    # Start MLflow server
+./scripts/mlflow_manager.sh status   # Check status
+./scripts/mlflow_manager.sh logs     # View logs
+./scripts/mlflow_manager.sh stop     # Stop MLflow server
 ```
+
 3. Access the MLflow UI at http://localhost:5005
-4. To stop the MLflow service:
-```bash
-docker-compose down
-```
 
 ### Using MLflow in your code
 
