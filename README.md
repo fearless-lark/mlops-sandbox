@@ -47,3 +47,9 @@ To run the linter, use the following command:
 ```
 pylint $(git ls-files '*.py')
 ```
+
+## MLFlow
+**Start the MLFlow UI**
+```
+mlflow ui --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns
+```

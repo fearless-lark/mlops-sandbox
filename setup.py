@@ -10,9 +10,9 @@ with open("requirements.txt", "r", encoding="utf-8") as f:
 setup(
     name="mlops-sandbox",
     version="0.1.0",
-    description="MLOps Zoomcamp Sandbox project for learning MLOps concepts",
+    description="MLOps Sandbox project for practicing MLOps concepts",
     author="fearless-lark",
-    author_email="user@example.com",
+    author_email="*@*.com",
     python_requires=">=3.12",
     packages=find_packages(),
     install_requires=requirements,

@@ -9,7 +9,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import root_mean_squared_error
 
 HPO_EXPERIMENT_NAME = "random-forest-hyperopt"
-EXPERIMENT_NAME = "random-forest-best-models-02"
+EXPERIMENT_NAME = "random-forest-best-models"
 RF_PARAMS = ["max_depth", "n_estimators", "min_samples_split", "min_samples_leaf", "random_state"]
 
 mlflow.set_tracking_uri("http://127.0.0.1:5000")
@@ -45,7 +45,7 @@ def train_and_log_model(data_path, params):
 @click.command()
 @click.option(
     "--data_path",
-    default="02-experiments-tracking/data/preprocessed/",
+    default="./02-experiment-tracking/data/preprocessed/",
     help="Location where the processed NYC taxi trip data was saved"
 )
 @click.option(
@@ -82,7 +82,7 @@ def run_register_model(data_path: str, top_n: int):
     mlflow.register_model(
         f"runs:/{best_run.info.run_id}/model",
         "NYC-Taxi-Model",
-        tags={"source": "02-experiments-tracking/register_model.py"}
+        tags={"source": "./02-experiment-tracking/register_model.py"}
     )
 
 if __name__ == "__main__":

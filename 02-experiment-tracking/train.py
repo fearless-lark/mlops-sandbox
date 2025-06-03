@@ -15,7 +15,7 @@ def load_pickle(filename: str):
 @click.command()
 @click.option(
     "--data_path",
-    default="02-experiments-tracking/data/preprocessed/",
+    default="./02-experiment-tracking/data/preprocessed/",
     help="Location where the processed NYC taxi trip data was saved"
 )
 def run_train(data_path: str):
