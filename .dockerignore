@@ -1,0 +1,21 @@
+# Ignore Python bytecode files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore local MLflow data
+mlruns/
+mlflow.db
+
+# Ignore data directories
+**/data/
+
+# Ignore other irrelevant directories
+01-intro/
+02-experiment-tracking/
+
+# Ignore git directory
+.git/
+
+# Ignore Python virtual environment
+.venv/

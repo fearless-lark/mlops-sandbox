@@ -49,7 +49,34 @@ pylint $(git ls-files '*.py')
 ```
 
 ## MLFlow
-**Start the MLFlow UI**
+
+### Running MLflow with Docker
+
+To run MLflow using Docker:
+
+1. Make sure you have Docker and Docker Compose installed on your system
+2. Build and start the MLflow service:
+```bash
+docker-compose up -d
 ```
-mlflow ui --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns
+3. Access the MLflow UI at http://localhost:5005
+4. To stop the MLflow service:
+```bash
+docker-compose down
+```
+
+### Using MLflow in your code
+
+When using MLflow with Docker, set the tracking URI in your Python code:
+
+```python
+import mlflow
+mlflow.set_tracking_uri("http://localhost:5005")
+```
+
+This will connect your experiments to the MLflow server running in Docker.
+
+### Running MLflow locally
+```
+mlflow ui --port 5005 --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns
 ```
