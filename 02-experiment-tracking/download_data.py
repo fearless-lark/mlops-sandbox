@@ -1,19 +1,11 @@
 """Download data files if they do not exist locally."""
-import os
-import sys
-
-# Add the project root (1 level up from the notebook) to sys.path
-project_root = os.path.abspath(os.path.join(os.getcwd(), ".."))
-if project_root not in sys.path:
-    sys.path.append(project_root)
-
-from utils import download_files
+from utils.utils import download_files
 
 
 files_path = [
-    "./data/raw/green_tripdata_2023-01.parquet",
-    "./data/raw/green_tripdata_2023-02.parquet",
-    "./data/raw/green_tripdata_2023-03.parquet",
+    "./02-experiment-tracking/data/raw/green_tripdata_2023-01.parquet",
+    "./02-experiment-tracking/data/raw/green_tripdata_2023-02.parquet",
+    "./02-experiment-tracking/data/raw/green_tripdata_2023-03.parquet",
     ]
 urls = [
     "https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_2023-01.parquet",

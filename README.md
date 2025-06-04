@@ -35,8 +35,9 @@ source .venv/bin/activate
 
 7. Install project dependencies
 ```bash
-pip install --upgrade pip
-pip install -r requirements.txt
+uv pip install --upgrade pip
+uv pip install -e .
+uv pip install -r requirements.txt
 ```
 
 ## Linting and Code Checks
@@ -45,4 +46,63 @@ To ensure consistent code quality and styling, this project employs pylint as a 
 To run the linter, use the following command:
 ```
 pylint $(git ls-files '*.py')
+```
+
+## MLFlow
+
+### MLflow Configuration with .env File
+
+MLflow is configured via a `.env` file in the project root. Make sure to set these variables:
+
+```properties
+# MLflow configuration
+MLFLOW_SERVER_HOST=0.0.0.0         # Host address for the MLflow server
+MLFLOW_SERVER_PORT=5005            # Port for the MLflow server
+MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db  # Database for metadata
+MLFLOW_DEFAULT_ARTIFACT_ROOT=./mlruns        # Artifact storage location
+MLFLOW_TRACKING_URI=http://localhost:5005    # Client connection URI
+```
+
+A template file `.env.sample` is provided in the repository. Copy it to create your own `.env` file:
+
+```bash
+cp .env.sample .env
+```
+
+### Running MLflow with Docker
+
+To run MLflow using Docker:
+
+1. Make sure you have Docker and Docker Compose installed on your system
+2. Use the provided management script:
+
+```bash
+# Interactive menu mode (recommended)
+./scripts/mlflow_manager.sh
+
+# Or use specific commands
+./scripts/mlflow_manager.sh start    # Start MLflow server
+./scripts/mlflow_manager.sh status   # Check status
+./scripts/mlflow_manager.sh logs     # View logs
+./scripts/mlflow_manager.sh stop     # Stop MLflow server
+```
+
+3. Access the MLflow UI at http://localhost:5005
+
+### Using MLflow in your code
+
+When using MLflow in your code, use the utility function to load the configuration:
+
+```python
+from utils.mlflow_utils import setup_mlflow
+
+# Load config from .env
+setup_mlflow()
+
+# Use MLflow as usual
+```
+
+### Running MLflow locally
+```
+mlflow ui --port 5005 --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns
 ```

@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  mlflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${MLFLOW_SERVER_PORT}:${MLFLOW_SERVER_PORT}"
+    volumes:
+      - ./mlruns:/app/mlruns
+      - ./mlflow.db:/app/mlflow.db
+    environment:
+      - MLFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI}
+      - MLFLOW_SERVER_HOST=${MLFLOW_SERVER_HOST}
+      - MLFLOW_SERVER_PORT=${MLFLOW_SERVER_PORT}
+      - MLFLOW_BACKEND_STORE_URI=${MLFLOW_BACKEND_STORE_URI}
+      - MLFLOW_DEFAULT_ARTIFACT_ROOT=${MLFLOW_DEFAULT_ARTIFACT_ROOT}
+    restart: unless-stopped

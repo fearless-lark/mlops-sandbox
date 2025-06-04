@@ -6,6 +6,9 @@ import mlflow
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import root_mean_squared_error
 
+# Import MLflow utility for .env configuration
+from utils.mlflow_utils import setup_mlflow
+
 
 def load_pickle(filename: str):
     with open(filename, "rb") as f_in:
@@ -15,10 +18,14 @@ def load_pickle(filename: str):
 @click.command()
 @click.option(
     "--data_path",
-    default="02-experiments-tracking/data/preprocessed/",
+    default="./02-experiment-tracking/data/preprocessed/",
     help="Location where the processed NYC taxi trip data was saved"
 )
 def run_train(data_path: str):
+    # Setup MLflow using environment variables from .env
+    tracking_uri = setup_mlflow()
+    print(f"Using MLflow tracking URI: {tracking_uri}")
+
     # Enable MLflow autologging
     mlflow.autolog()
 
