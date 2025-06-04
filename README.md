@@ -106,3 +106,34 @@ setup_mlflow()
 ```
 mlflow ui --port 5000 --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns
 ```
+
+## Dagster
+
+### Dagster Configuration
+
+Dagster is configured via the `.env` file in the project root. Make sure to set these variables:
+
+```properties
+# Dagster configuration
+DAGSTER_SERVER_PORT=3000           # Port for the Dagster server
+DAGSTER_HOME=./.dagster_home       # Directory for Dagster to store data
+```
+
+### Running Dagster Locally
+
+To run Dagster locally:
+
+1. Make sure you have Dagster installed in your environment.
+2. Use the provided management script:
+
+```bash
+# Interactive menu mode (recommended)
+./scripts/dagster_manager.sh
+
+# Or use specific commands
+./scripts/dagster_manager.sh start    # Start Dagster server
+./scripts/dagster_manager.sh status   # Check status
+./scripts/dagster_manager.sh stop     # Stop Dagster server
+```
+
+3. Access the Dagster UI at http://localhost:3000
