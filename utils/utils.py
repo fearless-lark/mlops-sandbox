@@ -48,15 +48,35 @@ def read_dataframe(filename):
     '''
     if filename.endswith('.csv'):
         df = pd.read_csv(filename)
-
-        df.lpep_dropoff_datetime = pd.to_datetime(df.lpep_dropoff_datetime)
-        df.lpep_pickup_datetime = pd.to_datetime(df.lpep_pickup_datetime)
+        try:
+            df.lpep_dropoff_datetime = pd.to_datetime(df.lpep_dropoff_datetime)
+            df.lpep_pickup_datetime = pd.to_datetime(df.lpep_pickup_datetime)
+        except AttributeError:
+            df.tpep_dropoff_datetime = pd.to_datetime(df.tpep_dropoff_datetime)
+            df.tpep_pickup_datetime = pd.to_datetime(df.tpep_pickup_datetime)
     elif filename.endswith('.parquet'):
         df = pd.read_parquet(filename)
 
-    df['duration'] = df.lpep_dropoff_datetime - df.lpep_pickup_datetime
+    try:
+        df['duration'] = df.lpep_dropoff_datetime - df.lpep_pickup_datetime
+    except AttributeError:
+        df['duration'] = df.tpep_dropoff_datetime - df.tpep_pickup_datetime
     df.duration = df.duration.apply(lambda td: td.total_seconds() / 60)
+    
+    return df
 
+
+def preprocess_dataframe(filename):
+    '''
+    Processes the DataFrame by filtering out trips with invalid durations and converting
+    categorical columns to strings.
+    Args:
+        filename (str): Path to the CSV or Parquet file.
+    Returns:
+        pd.DataFrame: Processed DataFrame with valid durations and categorical columns as strings.
+    '''
+    df = read_dataframe(filename)
+    # Filter trips with duration between 1 and 60 minutes
     df = df[(df.duration >= 1) & (df.duration <= 60)]
 
     categorical = ['PULocationID', 'DOLocationID']
