@@ -50,6 +50,25 @@ pylint $(git ls-files '*.py')
 
 ## MLFlow
 
+### MLflow Configuration with .env File
+
+MLflow is configured via a `.env` file in the project root. Make sure to set these variables:
+
+```properties
+# MLflow configuration
+MLFLOW_SERVER_HOST=0.0.0.0         # Host address for the MLflow server
+MLFLOW_SERVER_PORT=5005            # Port for the MLflow server
+MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db  # Database for metadata
+MLFLOW_DEFAULT_ARTIFACT_ROOT=./mlruns        # Artifact storage location
+MLFLOW_TRACKING_URI=http://localhost:5005    # Client connection URI
+```
+
+A template file `.env.sample` is provided in the repository. Copy it to create your own `.env` file:
+
+```bash
+cp .env.sample .env
+```
+
 ### Running MLflow with Docker
 
 To run MLflow using Docker:
@@ -72,14 +91,16 @@ To run MLflow using Docker:
 
 ### Using MLflow in your code
 
-When using MLflow with Docker, set the tracking URI in your Python code:
+When using MLflow in your code, use the utility function to load the configuration:
 
 ```python
-import mlflow
-mlflow.set_tracking_uri("http://localhost:5005")
-```
+from utils.mlflow_utils import setup_mlflow
 
-This will connect your experiments to the MLflow server running in Docker.
+# Load config from .env
+setup_mlflow()
+
+# Use MLflow as usual
+```
 
 ### Running MLflow locally
 ```
