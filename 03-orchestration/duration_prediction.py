@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
+"""
+Module for predicting NYC taxi trip durations using XGBoost.
+This script trains an ML model on NYC green taxi data and tracks experiments with MLflow.
+"""
 
 import pickle
 from pathlib import Path
@@ -52,7 +56,7 @@ def create_x(df, dv=None):
 
 
 def train_model(x_train, y_train, x_val, y_val, dv):
-    with mlflow.start_run() as run:
+    with mlflow.start_run() as mlflow_run:
         train = xgb.DMatrix(x_train, label=y_train)
         valid = xgb.DMatrix(x_val, label=y_val)
 
@@ -86,7 +90,7 @@ def train_model(x_train, y_train, x_val, y_val, dv):
 
         mlflow.xgboost.log_model(booster, artifact_path="models_mlflow")
 
-        return run.info.run_id
+        return mlflow_run.info.run_id
 
 
 def run(year, month):
@@ -116,7 +120,7 @@ if __name__ == "__main__":
     parser.add_argument("--month", type=int, required=True, help="Month of the data to train on")
     args = parser.parse_args()
 
-    run_id = run(year=args.year, month=args.month)
+    model_run_id = run(year=args.year, month=args.month)
 
-    with open("run_id.txt", "w") as f:
-        f.write(run_id)
+    with open("run_id.txt", "w", encoding="utf-8") as f:
+        f.write(model_run_id)
