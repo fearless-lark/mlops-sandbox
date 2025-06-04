@@ -8,8 +8,12 @@ from hyperopt.pyll import scope
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import root_mean_squared_error
 
-mlflow.set_tracking_uri("http://127.0.0.1:5005")
-mlflow.set_experiment("random-forest-hyperopt")
+# Import MLflow utility for .env configuration
+from utils.mlflow_utils import setup_mlflow
+
+# Set up MLflow tracking with .env configuration
+setup_mlflow()
+mlflow.set_experiment("random-forest-hyperopt-env")
 
 
 def load_pickle(filename: str):

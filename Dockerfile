@@ -8,7 +8,7 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-# Make port 5005 available to the world outside this container
-EXPOSE 5005
+# Make port available to the world outside this container
+EXPOSE ${MLFLOW_SERVER_PORT}
 
-ENTRYPOINT ["mlflow", "server", "--host", "0.0.0.0", "--port", "5005", "--backend-store-uri", "sqlite:///mlflow.db", "--default-artifact-root", "./mlruns"]
+ENTRYPOINT ["sh", "-c", "mlflow server --host ${MLFLOW_SERVER_HOST} --port ${MLFLOW_SERVER_PORT} --backend-store-uri ${MLFLOW_BACKEND_STORE_URI} --default-artifact-root ${MLFLOW_DEFAULT_ARTIFACT_ROOT}"]

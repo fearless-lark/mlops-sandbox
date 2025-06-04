@@ -6,10 +6,14 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "5005:5005"
+      - "${MLFLOW_SERVER_PORT}:${MLFLOW_SERVER_PORT}"
     volumes:
       - ./mlruns:/app/mlruns
       - ./mlflow.db:/app/mlflow.db
     environment:
-      - MLFLOW_TRACKING_URI=http://localhost:5005
+      - MLFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI}
+      - MLFLOW_SERVER_HOST=${MLFLOW_SERVER_HOST}
+      - MLFLOW_SERVER_PORT=${MLFLOW_SERVER_PORT}
+      - MLFLOW_BACKEND_STORE_URI=${MLFLOW_BACKEND_STORE_URI}
+      - MLFLOW_DEFAULT_ARTIFACT_ROOT=${MLFLOW_DEFAULT_ARTIFACT_ROOT}
     restart: unless-stopped
