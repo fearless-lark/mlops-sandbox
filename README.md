@@ -57,10 +57,10 @@ MLflow is configured via a `.env` file in the project root. Make sure to set the
 ```properties
 # MLflow configuration
 MLFLOW_SERVER_HOST=0.0.0.0         # Host address for the MLflow server
-MLFLOW_SERVER_PORT=5005            # Port for the MLflow server
+MLFLOW_SERVER_PORT=5000            # Port for the MLflow server
 MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow.db  # Database for metadata
 MLFLOW_DEFAULT_ARTIFACT_ROOT=./mlruns        # Artifact storage location
-MLFLOW_TRACKING_URI=http://localhost:5005    # Client connection URI
+MLFLOW_TRACKING_URI=http://localhost:5000    # Client connection URI
 ```
 
 A template file `.env.sample` is provided in the repository. Copy it to create your own `.env` file:
@@ -87,7 +87,7 @@ To run MLflow using Docker:
 ./scripts/mlflow_manager.sh stop     # Stop MLflow server
 ```
 
-3. Access the MLflow UI at http://localhost:5005
+3. Access the MLflow UI at http://localhost:5000
 
 ### Using MLflow in your code
 
@@ -104,5 +104,5 @@ setup_mlflow()
 
 ### Running MLflow locally
 ```
-mlflow ui --port 5005 --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns
+mlflow ui --port 5000 --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlruns
 ```

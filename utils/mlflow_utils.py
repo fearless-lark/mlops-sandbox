@@ -14,7 +14,7 @@ def setup_mlflow():
     load_dotenv()
 
     # Set tracking URI from environment variable
-    tracking_uri = os.getenv('MLFLOW_TRACKING_URI', 'http://localhost:5005')
+    tracking_uri = os.getenv('MLFLOW_TRACKING_URI', 'http://localhost:5000')
     mlflow.set_tracking_uri(tracking_uri)
 
     return tracking_uri

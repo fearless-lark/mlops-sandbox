@@ -15,8 +15,14 @@ NC="\033[0m" # No Color
 cd "$(dirname "$0")/.." || { echo -e "${RED}Failed to change to project root directory${NC}"; exit 1; }
 
 # Load environment variables from .env file
-source .env
-MLFLOW_SERVER_PORT=${MLFLOW_SERVER_PORT:-5005}
+if [ -f .env ]; then
+    source .env
+else
+    echo -e "${YELLOW}Warning: .env file not found. Using default values.${NC}"
+fi
+
+# Set default port if not defined in .env
+MLFLOW_SERVER_PORT=${MLFLOW_SERVER_PORT:-5000}
 
 # Function to check if Docker is running
 check_docker() {
@@ -201,7 +207,7 @@ get_port_status() {
     fi
 }
 
-# Check if port 5005 is in use
+# Check if port is in use
 check_port() {
     if lsof -i :${MLFLOW_SERVER_PORT} > /dev/null 2>&1; then
         echo -e "${YELLOW}Port ${MLFLOW_SERVER_PORT} is currently in use:${NC}"
