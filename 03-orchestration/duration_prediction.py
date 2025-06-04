@@ -15,8 +15,11 @@ from sklearn.feature_extraction import DictVectorizer
 from sklearn.metrics import root_mean_squared_error
 
 import mlflow
+from utils.mlflow_utils import setup_mlflow
 
-mlflow.set_tracking_uri("http://localhost:5000")
+
+# Set up MLflow tracking with .env configuration
+setup_mlflow()
 mlflow.set_experiment("nyc-taxi-experiment")
 
 models_folder = Path("models")

@@ -8,8 +8,8 @@ from hyperopt.pyll import scope
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import root_mean_squared_error
 
-# Import MLflow utility for .env configuration
 from utils.mlflow_utils import setup_mlflow
+
 
 # Set up MLflow tracking with .env configuration
 setup_mlflow()
