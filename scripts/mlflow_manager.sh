@@ -14,6 +14,10 @@ NC="\033[0m" # No Color
 # Change to project root directory
 cd "$(dirname "$0")/.." || { echo -e "${RED}Failed to change to project root directory${NC}"; exit 1; }
 
+# Load environment variables from .env file
+source .env
+MLFLOW_SERVER_PORT=${MLFLOW_SERVER_PORT:-5005}
+
 # Function to check if Docker is running
 check_docker() {
     if ! docker info > /dev/null 2>&1; then
@@ -28,7 +32,7 @@ display_header() {
     echo -e "${BLUE}===============================================${NC}"
     echo -e "${BLUE}             MLflow Manager Script            ${NC}"
     echo -e "${BLUE}===============================================${NC}"
-    echo -e "${CYAN}            Port: 5005 | Date: $(date '+%Y-%m-%d')${NC}"
+    echo -e "${CYAN}            Port: ${MLFLOW_SERVER_PORT} | Date: $(date '+%Y-%m-%d')${NC}"
     echo
 }
 
@@ -44,7 +48,7 @@ show_usage() {
     echo -e "  ${GREEN}follow-logs${NC} - Follow MLflow server logs"
     echo -e "  ${GREEN}rebuild${NC}    - Rebuild MLflow Docker image"
     echo -e "  ${GREEN}clean${NC}      - Remove MLflow Docker container, network and prune system"
-    echo -e "  ${GREEN}port${NC}       - Check if port 5005 is in use"
+    echo -e "  ${GREEN}port${NC}       - Check if port ${MLFLOW_SERVER_PORT} is in use"
     echo -e "  ${GREEN}help${NC}       - Show this help message"
     echo -e "\n${YELLOW}Or run without arguments for interactive menu${NC}"
 }
@@ -52,7 +56,7 @@ show_usage() {
 # Function to display current status line
 display_status_line() {
     echo -e "${YELLOW}MLflow Status:${NC} $(get_mlflow_status)"
-    echo -e "${YELLOW}Port 5005:${NC} $(get_port_status)"
+    echo -e "${YELLOW}Port ${MLFLOW_SERVER_PORT}:${NC} $(get_port_status)"
     echo
 }
 
@@ -75,7 +79,7 @@ interactive_menu() {
         echo -e "${CYAN}6)${NC} Follow logs in real-time"
         echo -e "${CYAN}7)${NC} Rebuild Docker image"
         echo -e "${CYAN}8)${NC} Clean Docker resources"
-        echo -e "${CYAN}9)${NC} Check port 5005 usage"
+        echo -e "${CYAN}9)${NC} Check port ${MLFLOW_SERVER_PORT} usage"
         echo -e "${CYAN}0)${NC} Exit"
         echo
         read -p "Enter your choice [0-9]: " choice
@@ -190,7 +194,7 @@ get_port_status() {
     # Give system a moment to update port status
     sleep 0.5
     
-    if lsof -i :5005 > /dev/null 2>&1; then
+    if lsof -i :${MLFLOW_SERVER_PORT} > /dev/null 2>&1; then
         echo -e "${YELLOW}In Use${NC}"
     else
         echo -e "${GREEN}Available${NC}"
@@ -199,12 +203,12 @@ get_port_status() {
 
 # Check if port 5005 is in use
 check_port() {
-    if lsof -i :5005 > /dev/null 2>&1; then
-        echo -e "${YELLOW}Port 5005 is currently in use:${NC}"
-        lsof -i :5005
+    if lsof -i :${MLFLOW_SERVER_PORT} > /dev/null 2>&1; then
+        echo -e "${YELLOW}Port ${MLFLOW_SERVER_PORT} is currently in use:${NC}"
+        lsof -i :${MLFLOW_SERVER_PORT}
         return 0
     else
-        echo -e "${GREEN}Port 5005 is available.${NC}"
+        echo -e "${GREEN}Port ${MLFLOW_SERVER_PORT} is available.${NC}"
         return 1
     fi
 }
@@ -212,30 +216,30 @@ check_port() {
 # Ensure port is available before starting
 ensure_port_available() {
     if check_port; then
-        read -p "Would you like to free port 5005 (y/n)? " -n 1 -r
+        read -p "Would you like to free port ${MLFLOW_SERVER_PORT} (y/n)? " -n 1 -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-            echo -e "${YELLOW}Attempting to free port 5005...${NC}"
+            echo -e "${YELLOW}Attempting to free port ${MLFLOW_SERVER_PORT}...${NC}"
             
             # Try to identify and stop the process
-            local pid=$(lsof -i :5005 -t)
+            local pid=$(lsof -i :${MLFLOW_SERVER_PORT} -t)
             if [[ -n "$pid" ]]; then
                 echo -e "Stopping process with PID ${pid}"
                 kill -15 "$pid" || { echo -e "${RED}Failed to stop process, trying force kill...${NC}"; kill -9 "$pid"; }
                 sleep 2
-                if lsof -i :5005 > /dev/null 2>&1; then
-                    echo -e "${RED}Failed to free port 5005. Please stop the process manually.${NC}"
+                if lsof -i :${MLFLOW_SERVER_PORT} > /dev/null 2>&1; then
+                    echo -e "${RED}Failed to free port ${MLFLOW_SERVER_PORT}. Please stop the process manually.${NC}"
                     return 1
                 else
-                    echo -e "${GREEN}Successfully freed port 5005.${NC}"
+                    echo -e "${GREEN}Successfully freed port ${MLFLOW_SERVER_PORT}.${NC}"
                     return 0
                 fi
             else
-                echo -e "${RED}Could not identify the process using port 5005.${NC}"
+                echo -e "${RED}Could not identify the process using port ${MLFLOW_SERVER_PORT}.${NC}"
                 return 1
             fi
         else
-            echo -e "${YELLOW}Operation cancelled. Port 5005 is still in use.${NC}"
+            echo -e "${YELLOW}Operation cancelled. Port ${MLFLOW_SERVER_PORT} is still in use.${NC}"
             return 1
         fi
     fi
@@ -248,7 +252,7 @@ start_mlflow() {
     check_docker
     
     if ! ensure_port_available; then
-        echo -e "${RED}Cannot start MLflow server while port 5005 is in use.${NC}"
+        echo -e "${RED}Cannot start MLflow server while port ${MLFLOW_SERVER_PORT} is in use.${NC}"
         return 1
     fi
     
@@ -261,10 +265,10 @@ start_mlflow() {
         # Verify that the container is actually running
         if docker-compose ps | grep -q "mlflow.*Up"; then
             echo -e "${GREEN}MLflow server started successfully.${NC}"
-            echo -e "${GREEN}You can access the MLflow UI at http://localhost:5005${NC}"
+            echo -e "${GREEN}You can access the MLflow UI at http://localhost:${MLFLOW_SERVER_PORT}${NC}"
             
             # Try to check if the service responds
-            if curl -s -o /dev/null -w "%{http_code}" http://localhost:5005 2>/dev/null | grep -q "200"; then
+            if curl -s -o /dev/null -w "%{http_code}" http://localhost:${MLFLOW_SERVER_PORT} 2>/dev/null | grep -q "200"; then
                 echo -e "${GREEN}MLflow UI is responding properly.${NC}"
             else
                 echo -e "${YELLOW}MLflow container is running but the UI might need more time to initialize.${NC}"
@@ -310,8 +314,8 @@ status_mlflow() {
         docker-compose ps
         
         # Check if service is actually responding
-        if curl -s -o /dev/null -w "%{http_code}" http://localhost:5005 | grep -q "200"; then
-            echo -e "${GREEN}MLflow UI is accessible at http://localhost:5005${NC}"
+        if curl -s -o /dev/null -w "%{http_code}" http://localhost:${MLFLOW_SERVER_PORT} | grep -q "200"; then
+            echo -e "${GREEN}MLflow UI is accessible at http://localhost:${MLFLOW_SERVER_PORT}${NC}"
         else
             echo -e "${YELLOW}MLflow container is running but the UI is not responding.${NC}"
         fi
