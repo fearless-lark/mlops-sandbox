@@ -25,7 +25,7 @@ cd mlops-sandbox
 
 5. Create virtual environment for the projects
 ```bash
-python3 -m venv .venv
+python3.12 -m venv .venv
 ```
 
 6. Activating a virtual environment

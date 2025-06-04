@@ -1,2 +1,2 @@
 [tool.dagster]
-workspace = "dagster_home"
+workspace = ".dagster_home"
